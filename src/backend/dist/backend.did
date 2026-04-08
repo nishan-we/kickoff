@@ -1,0 +1,156 @@
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UpdateScoreInput = 
+ record {
+   awayScore: nat;
+   homeScore: nat;
+   matchId: MatchId;
+ };
+type TournamentView = 
+ record {
+   createdAt: Timestamp;
+   format: TournamentFormat;
+   id: TournamentId;
+   name: text;
+   status: TournamentStatus;
+   totalTeams: nat;
+ };
+type TournamentStatus = 
+ variant {
+   active;
+   completed;
+   upcoming;
+ };
+type TournamentId = nat;
+type TournamentFormat = 
+ variant {
+   hybrid;
+   knockout;
+   league;
+ };
+type Timestamp = int;
+type TeamView = 
+ record {
+   color: text;
+   id: TeamId;
+   name: text;
+   tournamentId: TournamentId;
+ };
+type TeamId = nat;
+type PlayerView = 
+ record {
+   id: PlayerId;
+   name: text;
+   number: nat;
+   position: text;
+   teamId: TeamId;
+   tournamentId: TournamentId;
+ };
+type PlayerId = nat;
+type MatchView = 
+ record {
+   awayScore: nat;
+   awayTeamId: TeamId;
+   completedAt: opt Timestamp;
+   homeScore: nat;
+   homeTeamId: TeamId;
+   id: MatchId;
+   phase: MatchPhase;
+   scheduledAt: Timestamp;
+   status: MatchStatus;
+   tournamentId: TournamentId;
+ };
+type MatchStatus = 
+ variant {
+   completed;
+   live;
+   scheduled;
+ };
+type MatchPhase = 
+ variant {
+   knockoutRound: nat;
+   leagueStage;
+ };
+type MatchId = nat;
+type LeagueStandingRow = 
+ record {
+   drawn: nat;
+   goalDifference: int;
+   goalsAgainst: nat;
+   goalsFor: nat;
+   lost: nat;
+   played: nat;
+   points: nat;
+   position: nat;
+   teamId: TeamId;
+   teamName: text;
+   won: nat;
+ };
+type KnockoutBracketMatch = 
+ record {
+   awayTeamId: opt TeamId;
+   homeTeamId: opt TeamId;
+   matchId: opt MatchId;
+   round: nat;
+   winnerId: opt TeamId;
+ };
+type EditPlayerInput = 
+ record {
+   name: text;
+   number: nat;
+   playerId: PlayerId;
+   position: text;
+ };
+type CreateTournamentInput = 
+ record {
+   format: TournamentFormat;
+   name: text;
+   totalTeams: nat;
+ };
+type AddTeamInput = 
+ record {
+   color: text;
+   name: text;
+   tournamentId: TournamentId;
+ };
+type AddPlayerInput = 
+ record {
+   name: text;
+   number: nat;
+   position: text;
+   teamId: TeamId;
+   tournamentId: TournamentId;
+ };
+service : {
+  _initializeAccessControl: () -> ();
+  addPlayer: (input: AddPlayerInput) -> (PlayerView);
+  addTeam: (input: AddTeamInput) -> (TeamView);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  completeMatch: (matchId: MatchId) -> ();
+  createTournament: (input: CreateTournamentInput) -> (TournamentView);
+  editPlayer: (input: EditPlayerInput) -> ();
+  generateFixtures: (tournamentId: TournamentId) -> (vec MatchView);
+  getCallerUserRole: () -> (UserRole) query;
+  getKnockoutBracket: (tournamentId: TournamentId) ->
+   (vec KnockoutBracketMatch) query;
+  getLeagueStandings: (tournamentId: TournamentId) ->
+   (vec LeagueStandingRow) query;
+  getMatchesByTournament: (tournamentId: TournamentId) ->
+   (vec MatchView) query;
+  getPlayersByTeam: (teamId: TeamId) -> (vec PlayerView) query;
+  getPlayersByTournament: (tournamentId: TournamentId) ->
+   (vec PlayerView) query;
+  getRecentResults: (tournamentId: TournamentId, limit: nat) ->
+   (vec MatchView) query;
+  getTeamsByTournament: (tournamentId: TournamentId) -> (vec TeamView) query;
+  getTournament: (tournamentId: TournamentId) -> (opt TournamentView) query;
+  isCallerAdmin: () -> (bool) query;
+  listTournaments: () -> (vec TournamentView) query;
+  updateScore: (input: UpdateScoreInput) -> ();
+  updateTournamentStatus: (tournamentId: TournamentId, status:
+   TournamentStatus) -> ();
+}

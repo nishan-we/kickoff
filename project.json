@@ -1,0 +1,24 @@
+{
+  "overview": "A football tournament management platform where organizers can create tournaments in league, knockout, or hybrid formats, manage teams and players, edit live match scores, and display professional standings and fixtures — all styled like Premier League and La Liga.",
+  "features": [
+    "Create tournaments with league, knockout, or hybrid formats",
+    "Manage teams and player rosters with positions and jersey numbers",
+    "Live score editing with automatic standings recalculation",
+    "Professional standings table with points, goals, and goal difference",
+    "Knockout bracket visualization",
+    "Fixture schedule with upcoming and completed matches",
+    "Read-only spectator access mode",
+    "Fully responsive design for mobile and desktop"
+  ],
+  "category": "sports",
+  "tags": [
+    "football",
+    "tournament",
+    "sports",
+    "standings",
+    "fixtures",
+    "league",
+    "knockout"
+  ],
+  "last_updated": "2026-04-08T14:20:52.933Z"
+}
